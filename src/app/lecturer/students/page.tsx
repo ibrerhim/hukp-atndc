@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { Suspense, useEffect, useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
     Card,
@@ -42,6 +42,18 @@ interface StudentAttendance {
 }
 
 export default function LowAttendancePage() {
+    return (
+        <Suspense fallback={
+            <div className="flex justify-center items-center h-64">
+                <LoadingSpinner size="lg" />
+            </div>
+        }>
+            <LowAttendanceContent />
+        </Suspense>
+    )
+}
+
+function LowAttendanceContent() {
     const searchParams = useSearchParams()
     const [courses, setCourses] = useState<Course[]>([])
     const [selectedCourse, setSelectedCourse] = useState(searchParams.get('course') || '')
